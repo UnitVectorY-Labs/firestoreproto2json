@@ -17,6 +17,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.skyscreamer.jsonassert.JSONAssert;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -34,7 +35,7 @@ import java.util.stream.Stream;
  */
 public class JsonFileTest {
 
-    private static final Gson GSON = new Gson();
+    private static final Gson GSON = new GsonBuilder().serializeNulls().create();
 
     @ParameterizedTest
     @MethodSource("provideFileNames")
@@ -44,20 +45,19 @@ public class JsonFileTest {
 
     private static Stream<String> provideFileNames() throws IOException {
         Path path = Paths.get("src/test/resources/tests");
+
         // Ensure the path is correct and the directory exists.
         if (!Files.exists(path) || !Files.isDirectory(path)) {
             return Stream.empty();
         }
+
+        // Get all of the files
         return Files.walk(path, 1).filter(Files::isRegularFile).map(path::relativize)
                 .map(Path::toString);
     }
 
     private void validate(String fileName) {
         try {
-            // Stubbed out validation method
-            // Implement your validation logic here
-            System.out.println("Validating: " + fileName);
-
             // Read in the file content
             Path filePath = Paths.get("src/test/resources/tests", fileName);
             String content = Files.readString(filePath);
@@ -65,6 +65,7 @@ public class JsonFileTest {
             if (!rootElement.isJsonObject()) {
                 fail("The root of the JSON document is not an object in " + fileName);
             }
+
             JsonObject rootObject = rootElement.getAsJsonObject();
 
             // Extract protobuf as a String
@@ -78,20 +79,15 @@ public class JsonFileTest {
             String expectedValue =
                     rootObject.has("value") ? GSON.toJson(rootObject.get("value")) : null;
             String actualValue = FirestoreProto2Json.DEFAULT.valueToJsonString(protobuf);
-
-            JSONAssert.assertEquals(
-                    "Value did not match.\nExpected: " + expectedValue + "\nActual: " + actualValue,
-                    expectedValue, actualValue, true);
+            JSONAssert.assertEquals("Value did not match.\nExpected: " + expectedValue
+                    + "\nActual: " + actualValue + "\n", expectedValue, actualValue, true);
 
             // Process the old value
             String expectedOldValue =
                     rootObject.has("oldValue") ? GSON.toJson(rootObject.get("oldValue")) : null;
-
             String actualOldValue = FirestoreProto2Json.DEFAULT.oldValueToJsonString(protobuf);
-
-
             JSONAssert.assertEquals("Old value did not match.\nExpected: " + expectedOldValue
-                    + "\nActual: " + actualOldValue, expectedOldValue, actualOldValue, true);
+                    + "\nActual: " + actualOldValue + "\n", expectedOldValue, actualOldValue, true);
 
 
         } catch (Exception e) {

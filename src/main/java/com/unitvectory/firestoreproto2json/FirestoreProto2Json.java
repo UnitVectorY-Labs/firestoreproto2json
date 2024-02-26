@@ -17,8 +17,12 @@ import java.util.Base64;
 import java.util.Map.Entry;
 import com.google.events.cloud.firestore.v1.Document;
 import com.google.events.cloud.firestore.v1.DocumentEventData;
+import com.google.events.cloud.firestore.v1.MapValue;
 import com.google.events.cloud.firestore.v1.Value;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.protobuf.InvalidProtocolBufferException;
 import lombok.Builder;
@@ -33,7 +37,7 @@ public class FirestoreProto2Json {
 
     public static final FirestoreProto2Json DEFAULT = FirestoreProto2Json.builder().build();
 
-    private static final Gson GSON = new Gson();
+    private static final Gson GSON = new GsonBuilder().serializeNulls().create();
 
     // TODO: Add the ability to define custom ways to convert the attribute types that are ambiguous
     // into JSON attributes
@@ -139,23 +143,54 @@ public class FirestoreProto2Json {
     private JsonObject documentToJsonObject(Document document) {
         JsonObject jsonObject = new JsonObject();
         for (Entry<String, Value> entry : document.getFieldsMap().entrySet()) {
-
-            String key = entry.getKey();
-            Value value = entry.getValue();
-
-            if (value.hasIntegerValue()) {
-                jsonObject.addProperty(key, value.getIntegerValue());
-            } else if (value.hasStringValue()) {
-                jsonObject.addProperty(key, value.getStringValue());
-            } else if (value.hasDoubleValue()) {
-                jsonObject.addProperty(key, value.getDoubleValue());
-            } else if (value.hasBooleanValue()) {
-                jsonObject.addProperty(key, value.getBooleanValue());
-            }
-
-            // TODO: Handle all of the other types
+            appendValue(jsonObject, entry.getKey(), entry.getValue());
         }
 
         return jsonObject;
+    }
+
+
+    private void appendValue(JsonObject jsonObject, String key, Value value) {
+        if (value.hasMapValue()) {
+            MapValue mapValue = value.getMapValue();
+
+            JsonObject mapJsonObject = new JsonObject();
+            for (Entry<String, Value> entry : mapValue.getFieldsMap().entrySet()) {
+                appendValue(mapJsonObject, entry.getKey(), entry.getValue());
+            }
+
+            jsonObject.add(key, mapJsonObject);
+
+        } else if (value.hasArrayValue()) {
+            JsonArray jsonArray = new JsonArray();
+            for (Value arrayValue : value.getArrayValue().getValuesList()) {
+                appendValue(jsonArray, arrayValue);
+            }
+            jsonObject.add(key, jsonArray);
+        } else if (value.hasIntegerValue()) {
+            jsonObject.addProperty(key, value.getIntegerValue());
+        } else if (value.hasStringValue()) {
+            jsonObject.addProperty(key, value.getStringValue());
+        } else if (value.hasDoubleValue()) {
+            jsonObject.addProperty(key, value.getDoubleValue());
+        } else if (value.hasBooleanValue()) {
+            jsonObject.addProperty(key, value.getBooleanValue());
+        } else if (value.hasNullValue()) {
+            jsonObject.add(key, JsonNull.INSTANCE);
+        }
+    }
+
+    private void appendValue(JsonArray jsonArray, Value value) {
+        if (value.hasIntegerValue()) {
+            jsonArray.add(value.getIntegerValue());
+        } else if (value.hasStringValue()) {
+            jsonArray.add(value.getStringValue());
+        } else if (value.hasDoubleValue()) {
+            jsonArray.add(value.getDoubleValue());
+        } else if (value.hasBooleanValue()) {
+            jsonArray.add(value.getBooleanValue());
+        } else if (value.hasNullValue()) {
+            jsonArray.add(JsonNull.INSTANCE);
+        }
     }
 }

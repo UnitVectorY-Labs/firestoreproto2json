@@ -183,11 +183,29 @@ public class FirestoreProto2Json {
             timestampValueMapper.convert(jsonObject, key, value);
         } else if (value.hasGeoPointValue()) {
             geoPointValueMapper.convert(jsonObject, key, value);
+        } else if (value.hasReferenceValue()) {
+            jsonObject.addProperty(key, value.getReferenceValue());
         }
     }
 
     private void appendValue(JsonArray jsonArray, Value value) {
-        if (value.hasIntegerValue()) {
+        if (value.hasMapValue()) {
+            MapValue mapValue = value.getMapValue();
+
+            JsonObject mapJsonObject = new JsonObject();
+            for (Entry<String, Value> entry : mapValue.getFieldsMap().entrySet()) {
+                appendValue(mapJsonObject, entry.getKey(), entry.getValue());
+            }
+
+            jsonArray.add(mapJsonObject);
+
+        } else if (value.hasArrayValue()) {
+            JsonArray newJsonArray = new JsonArray();
+            for (Value arrayValue : value.getArrayValue().getValuesList()) {
+                appendValue(newJsonArray, arrayValue);
+            }
+            jsonArray.add(newJsonArray);
+        } else if (value.hasIntegerValue()) {
             jsonArray.add(value.getIntegerValue());
         } else if (value.hasStringValue()) {
             jsonArray.add(value.getStringValue());
@@ -201,6 +219,8 @@ public class FirestoreProto2Json {
             timestampValueMapper.convert(jsonArray, value);
         } else if (value.hasGeoPointValue()) {
             geoPointValueMapper.convert(jsonArray, value);
+        } else if (value.hasReferenceValue()) {
+            jsonArray.add(value.getReferenceValue());
         }
     }
 }

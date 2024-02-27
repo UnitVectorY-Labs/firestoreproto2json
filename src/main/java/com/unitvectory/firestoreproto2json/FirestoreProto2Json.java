@@ -35,6 +35,9 @@ import lombok.Builder;
 @Builder
 public class FirestoreProto2Json {
 
+    /**
+     * The default instance of FirestoreProto2Json
+     */
     public static final FirestoreProto2Json DEFAULT = FirestoreProto2Json.builder().build();
 
     private static final Gson GSON = new GsonBuilder().serializeNulls().create();
@@ -45,34 +48,45 @@ public class FirestoreProto2Json {
     @Builder.Default
     private ValueMapperGeoPoint geoPointValueMapper = new ValueMapperGeoPointDefault();
 
+    /**
+     * Convert a DocumentEventData value to a JSON string.
+     * 
+     * @param documentEventData the documentEventData
+     * @return the JSON string for the value if set; otherwise null
+     */
     public String valueToJsonString(DocumentEventData documentEventData) {
-        JsonObject jsonObject = valueToJsonObject(documentEventData);
-        if (jsonObject == null) {
-            return null;
-        }
-
-        return GSON.toJson(jsonObject);
+        return toJsonString(valueToJsonObject(documentEventData));
     }
 
+    /**
+     * Convert the base64 encoded protocol buffer of a DocumentEventData value to a JSON string.
+     * 
+     * @param base64DocumentBytes the base64 encoded protocol buffer of a DocumentEventData
+     * @return the JSON string for the value if set; otherwise null
+     * @throws InvalidProtocolBufferException
+     */
     public String valueToJsonString(String base64DocumentBytes)
             throws InvalidProtocolBufferException {
-        JsonObject jsonObject = valueToJsonObject(base64DocumentBytes);
-        if (jsonObject == null) {
-            return null;
-        }
-
-        return GSON.toJson(jsonObject);
+        return toJsonString(valueToJsonObject(base64DocumentBytes));
     }
 
+    /**
+     * Convert the protocol buffer bytes of a DocumentEventData value to a JSON string.
+     * 
+     * @param documentBytes the protocol buffer bytes of a DocumentEventData
+     * @return the JSON string for the value if set; otherwise null
+     * @throws InvalidProtocolBufferException
+     */
     public String valueToJsonString(byte[] documentBytes) throws InvalidProtocolBufferException {
-        JsonObject jsonObject = valueToJsonObject(documentBytes);
-        if (jsonObject == null) {
-            return null;
-        }
-
-        return GSON.toJson(jsonObject);
+        return toJsonString(valueToJsonObject(documentBytes));
     }
 
+    /**
+     * Convert a DocumentEventData value to a JSON object.
+     * 
+     * @param documentEventData the documentEventData
+     * @return the JSON object for the value if set; otherwise null
+     */
     public JsonObject valueToJsonObject(DocumentEventData documentEventData) {
         if (documentEventData.hasValue()) {
             Document document = documentEventData.getValue();
@@ -82,46 +96,71 @@ public class FirestoreProto2Json {
         }
     }
 
+    /**
+     * Convert the base64 encoded protocol buffer of a DocumentEventData value to a JSON object.
+     * 
+     * @param base64DocumentBytes the base64 encoded protocol buffer of a DocumentEventData
+     * @return the JSON object for the value if set; otherwise null
+     * @throws InvalidProtocolBufferException
+     */
     public JsonObject valueToJsonObject(String base64DocumentBytes)
             throws InvalidProtocolBufferException {
         byte[] documentBytes = Base64.getDecoder().decode(base64DocumentBytes);
         return valueToJsonObject(documentBytes);
     }
 
+    /**
+     * Convert the protocol buffer bytes of a DocumentEventData value to a JSON object.
+     * 
+     * @param documentBytes the protocol buffer bytes of a DocumentEventData
+     * @return the JSON object for the value if set; otherwise null
+     * @throws InvalidProtocolBufferException
+     */
     public JsonObject valueToJsonObject(byte[] documentBytes)
             throws InvalidProtocolBufferException {
         DocumentEventData documentEventData = DocumentEventData.parseFrom(documentBytes);
         return valueToJsonObject(documentEventData);
     }
 
+    /**
+     * Convert a DocumentEventData old value to a JSON string.
+     * 
+     * @param documentEventData the documentEventData
+     * @return the JSON string for the old value if set; otherwise null
+     */
     public String oldValueToJsonString(DocumentEventData documentEventData) {
-        JsonObject jsonObject = oldValueToJsonObject(documentEventData);
-        if (jsonObject == null) {
-            return null;
-        }
-
-        return GSON.toJson(jsonObject);
+        return toJsonString(oldValueToJsonObject(documentEventData));
     }
 
+    /**
+     * Convert the base64 encoded protocol buffer of a DocumentEventData old value to a JSON string.
+     * 
+     * @param base64DocumentBytes the base64 encoded protocol buffer of a DocumentEventData
+     * @return the JSON string for the old value if set; otherwise null
+     * @throws InvalidProtocolBufferException
+     */
     public String oldValueToJsonString(String base64DocumentBytes)
             throws InvalidProtocolBufferException {
-        JsonObject jsonObject = oldValueToJsonObject(base64DocumentBytes);
-        if (jsonObject == null) {
-            return null;
-        }
-
-        return GSON.toJson(jsonObject);
+        return toJsonString(oldValueToJsonObject(base64DocumentBytes));
     }
 
+    /**
+     * Convert the protocol buffer bytes of a DocumentEventData old value to a JSON string.
+     * 
+     * @param documentBytes the protocol buffer bytes of a DocumentEventData
+     * @return the JSON string for the old value if set; otherwise null
+     * @throws InvalidProtocolBufferException
+     */
     public String oldValueToJsonString(byte[] documentBytes) throws InvalidProtocolBufferException {
-        JsonObject jsonObject = oldValueToJsonObject(documentBytes);
-        if (jsonObject == null) {
-            return null;
-        }
-
-        return GSON.toJson(jsonObject);
+        return toJsonString(oldValueToJsonObject(documentBytes));
     }
 
+    /**
+     * Convert a DocumentEventData old value to a JSON object.
+     * 
+     * @param documentEventData the documentEventData
+     * @return the JSON object for the old value if set; otherwise null
+     */
     public JsonObject oldValueToJsonObject(DocumentEventData documentEventData) {
         if (documentEventData.hasOldValue()) {
             Document document = documentEventData.getOldValue();
@@ -131,12 +170,26 @@ public class FirestoreProto2Json {
         }
     }
 
+    /**
+     * Convert the base64 encoded protocol buffer of a DocumentEventData old value to a JSON object.
+     * 
+     * @param base64DocumentBytes the base64 encoded protocol buffer of a DocumentEventData
+     * @return the JSON object for the old value if set; otherwise null
+     * @throws InvalidProtocolBufferException
+     */
     public JsonObject oldValueToJsonObject(String base64DocumentBytes)
             throws InvalidProtocolBufferException {
         byte[] documentBytes = Base64.getDecoder().decode(base64DocumentBytes);
         return oldValueToJsonObject(documentBytes);
     }
 
+    /**
+     * Convert the protocol buffer bytes of a DocumentEventData old value to a JSON object.
+     * 
+     * @param documentBytes the protocol buffer bytes of a DocumentEventData
+     * @return the JSON object for the old value if set; otherwise null
+     * @throws InvalidProtocolBufferException
+     */
     public JsonObject oldValueToJsonObject(byte[] documentBytes)
             throws InvalidProtocolBufferException {
         DocumentEventData documentEventData = DocumentEventData.parseFrom(documentBytes);
@@ -150,6 +203,14 @@ public class FirestoreProto2Json {
         }
 
         return jsonObject;
+    }
+
+    private String toJsonString(JsonObject jsonObject) {
+        if (jsonObject == null) {
+            return null;
+        }
+
+        return GSON.toJson(jsonObject);
     }
 
     private void appendValue(JsonObject jsonObject, String key, Value value) {
@@ -199,12 +260,6 @@ public class FirestoreProto2Json {
 
             jsonArray.add(mapJsonObject);
 
-        } else if (value.hasArrayValue()) {
-            JsonArray newJsonArray = new JsonArray();
-            for (Value arrayValue : value.getArrayValue().getValuesList()) {
-                appendValue(newJsonArray, arrayValue);
-            }
-            jsonArray.add(newJsonArray);
         } else if (value.hasIntegerValue()) {
             jsonArray.add(value.getIntegerValue());
         } else if (value.hasStringValue()) {
@@ -222,5 +277,8 @@ public class FirestoreProto2Json {
         } else if (value.hasReferenceValue()) {
             jsonArray.add(value.getReferenceValue());
         }
+
+        // Nested arrays are not supported by Firestore and therefore not implemented as part of
+        // this method while other datatype conversions are implemented
     }
 }

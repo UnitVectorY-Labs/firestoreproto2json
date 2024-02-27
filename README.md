@@ -8,6 +8,12 @@ This library takes the Protocol Buffer sent from Firestore for a document and co
 
 This library takes the protocol buffer and converts it to a JSON Object using a set of assumptions that may or may not match how normal interactions with the document using the API.
 
+### Assumptions and Limitations
+
+The reason Google does not provide this functionality is most likely because there is not a single clean conversion between the Protocol Buffer representation of the document and the JSON representation expected by the application.
+
+Therefore, this library makes a few assumptions regarding the structure of the JSON payload to be generated. For example the formatting of the timestamp field into a string, there are multiple formats that could be used to represent the date.
+
 ## Usage
 
 When processing a Firestore document change using a Cloud Function the `DocumentEventData` object will already be parsed from the binary representation and can be converted to JSON.

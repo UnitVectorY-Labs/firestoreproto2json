@@ -32,15 +32,15 @@ import lombok.Builder;
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-@Builder()
+@Builder
 public class FirestoreProto2Json {
 
     public static final FirestoreProto2Json DEFAULT = FirestoreProto2Json.builder().build();
 
     private static final Gson GSON = new GsonBuilder().serializeNulls().create();
 
-    // TODO: Add the ability to define custom ways to convert the attribute types that are ambiguous
-    // into JSON attributes
+    @Builder.Default
+    private TimestampValueMapper timestampValueMapper = new SimpleDateFormatTimestampValueMapper();
 
     public String valueToJsonString(DocumentEventData documentEventData) {
         JsonObject jsonObject = valueToJsonObject(documentEventData);
@@ -149,7 +149,6 @@ public class FirestoreProto2Json {
         return jsonObject;
     }
 
-
     private void appendValue(JsonObject jsonObject, String key, Value value) {
         if (value.hasMapValue()) {
             MapValue mapValue = value.getMapValue();
@@ -177,6 +176,8 @@ public class FirestoreProto2Json {
             jsonObject.addProperty(key, value.getBooleanValue());
         } else if (value.hasNullValue()) {
             jsonObject.add(key, JsonNull.INSTANCE);
+        } else if (value.hasTimestampValue()) {
+            timestampValueMapper.convert(jsonObject, key, value);
         }
     }
 
@@ -191,6 +192,8 @@ public class FirestoreProto2Json {
             jsonArray.add(value.getBooleanValue());
         } else if (value.hasNullValue()) {
             jsonArray.add(JsonNull.INSTANCE);
+        } else if (value.hasTimestampValue()) {
+            timestampValueMapper.convert(jsonArray, value);
         }
     }
 }

@@ -42,6 +42,9 @@ public class FirestoreProto2Json {
     @Builder.Default
     private TimestampValueMapper timestampValueMapper = new SimpleDateFormatTimestampValueMapper();
 
+    @Builder.Default
+    private GeoPointValueMapper geoPointValueMapper = new DefaultGeoPointValueMapper();
+
     public String valueToJsonString(DocumentEventData documentEventData) {
         JsonObject jsonObject = valueToJsonObject(documentEventData);
         if (jsonObject == null) {
@@ -178,6 +181,8 @@ public class FirestoreProto2Json {
             jsonObject.add(key, JsonNull.INSTANCE);
         } else if (value.hasTimestampValue()) {
             timestampValueMapper.convert(jsonObject, key, value);
+        } else if (value.hasGeoPointValue()) {
+            geoPointValueMapper.convert(jsonObject, key, value);
         }
     }
 
@@ -194,6 +199,8 @@ public class FirestoreProto2Json {
             jsonArray.add(JsonNull.INSTANCE);
         } else if (value.hasTimestampValue()) {
             timestampValueMapper.convert(jsonArray, value);
+        } else if (value.hasGeoPointValue()) {
+            geoPointValueMapper.convert(jsonArray, value);
         }
     }
 }

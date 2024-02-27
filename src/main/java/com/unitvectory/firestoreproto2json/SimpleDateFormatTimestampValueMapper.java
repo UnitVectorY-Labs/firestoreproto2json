@@ -16,7 +16,6 @@ package com.unitvectory.firestoreproto2json;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import com.google.events.cloud.firestore.v1.Value;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.protobuf.Timestamp;
@@ -46,14 +45,14 @@ public class SimpleDateFormatTimestampValueMapper extends TimestampValueMapper {
     }
 
     @Override
-    public final void convert(JsonObject jsonObject, String key, Value value) {
-        String convert = formatTimestamp(value.getTimestampValue());
+    public final void convert(JsonObject jsonObject, String key, Timestamp timestamp) {
+        String convert = formatTimestamp(timestamp);
         jsonObject.addProperty(key, convert);
     }
 
     @Override
-    public final void convert(JsonArray jsonArray, Value value) {
-        String convert = formatTimestamp(value.getTimestampValue());
+    public final void convert(JsonArray jsonArray, Timestamp timestamp) {
+        String convert = formatTimestamp(timestamp);
         jsonArray.add(convert);
     }
 
@@ -67,5 +66,4 @@ public class SimpleDateFormatTimestampValueMapper extends TimestampValueMapper {
 
         return formatter.format(instant);
     }
-
 }

@@ -13,29 +13,31 @@
  */
 package com.unitvectory.firestoreproto2json;
 
-import com.google.events.cloud.firestore.v1.Value;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.protobuf.Timestamp;
+import com.google.type.LatLng;
 
 /**
- * Mapper for Timestamp field type.
+ * The default GeoPoint value mapper
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public abstract class TimestampValueMapper extends ValueMapper {
+public class DefaultGeoPointValueMapper extends GeoPointValueMapper {
 
-
-    final void convert(JsonObject jsonObject, String key, Value value) {
-        convert(jsonObject, key, value.getTimestampValue());
+    @Override
+    public void convert(JsonObject jsonObject, String key, LatLng geopoint) {
+        jsonObject.add(key, convert(geopoint));
     }
 
-    final void convert(JsonArray jsonArray, Value value) {
-        convert(jsonArray, value.getTimestampValue());
+    @Override
+    public void convert(JsonArray jsonArray, LatLng geopoint) {
+        jsonArray.add(convert(geopoint));
     }
 
-    public abstract void convert(JsonObject jsonObject, String key, Timestamp timestamp);
-
-    public abstract void convert(JsonArray jsonArray, Timestamp timestamp);
-
+    private JsonObject convert(LatLng geopoint) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("latitude", geopoint.getLatitude());
+        jsonObject.addProperty("longitude", geopoint.getLongitude());
+        return jsonObject;
+    }
 }

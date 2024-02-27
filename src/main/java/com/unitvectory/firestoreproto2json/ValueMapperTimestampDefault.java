@@ -21,27 +21,43 @@ import com.google.gson.JsonObject;
 import com.google.protobuf.Timestamp;
 
 /**
- * Formats protobuf Timestamp into a String representation.
+ * The default timestamp ValueMapper.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public class SimpleDateFormatTimestampValueMapper extends TimestampValueMapper {
+public class ValueMapperTimestampDefault extends ValueMapperTimestamp {
 
-    private final String pattern;
+    private static final String DEFAULT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
-    private final ZoneOffset offset;
+    /**
+     * The DateTimeFormatter.
+     */
+    private final DateTimeFormatter formatter;
 
-    public SimpleDateFormatTimestampValueMapper(String pattern, ZoneOffset offset) {
-        this.pattern = pattern;
-        this.offset = offset;
+    /**
+     * Creates a new instance of the ValueMapperTimestampDefault.
+     */
+    public ValueMapperTimestampDefault() {
+        this(DEFAULT_FORMAT, ZoneOffset.UTC);
     }
 
-    public SimpleDateFormatTimestampValueMapper(String pattern) {
+    /**
+     * Creates a new instance of the ValueMapperTimestampDefault.
+     * 
+     * @param pattern the DateTimeFormatter pattern
+     */
+    public ValueMapperTimestampDefault(String pattern) {
         this(pattern, ZoneOffset.UTC);
     }
 
-    public SimpleDateFormatTimestampValueMapper() {
-        this("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", ZoneOffset.UTC);
+    /**
+     * Creates a new instance of the ValueMapperTimestampDefault.
+     * 
+     * @param pattern the DateTimeFormatter pattern
+     * @param offset the ZoneOffset
+     */
+    public ValueMapperTimestampDefault(String pattern, ZoneOffset offset) {
+        this.formatter = DateTimeFormatter.ofPattern(pattern).withZone(offset);
     }
 
     @Override
@@ -60,10 +76,7 @@ public class SimpleDateFormatTimestampValueMapper extends TimestampValueMapper {
         // Convert the Timestamp to an Instant
         Instant instant = Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos());
 
-        // Format the Instant to RFC 3339 format
-        DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern(this.pattern).withZone(this.offset);
-
-        return formatter.format(instant);
+        // Now format the instant
+        return this.formatter.format(instant);
     }
 }

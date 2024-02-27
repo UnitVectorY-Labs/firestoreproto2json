@@ -40,10 +40,10 @@ public class FirestoreProto2Json {
     private static final Gson GSON = new GsonBuilder().serializeNulls().create();
 
     @Builder.Default
-    private TimestampValueMapper timestampValueMapper = new SimpleDateFormatTimestampValueMapper();
+    private ValueMapperTimestamp timestampValueMapper = new ValueMapperTimestampDefault();
 
     @Builder.Default
-    private GeoPointValueMapper geoPointValueMapper = new DefaultGeoPointValueMapper();
+    private ValueMapperGeoPoint geoPointValueMapper = new ValueMapperGeoPointDefault();
 
     public String valueToJsonString(DocumentEventData documentEventData) {
         JsonObject jsonObject = valueToJsonObject(documentEventData);

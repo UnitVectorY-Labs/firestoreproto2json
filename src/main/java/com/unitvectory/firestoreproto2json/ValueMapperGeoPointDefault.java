@@ -18,11 +18,11 @@ import com.google.gson.JsonObject;
 import com.google.type.LatLng;
 
 /**
- * The default GeoPoint value mapper
+ * The default GeoPoint ValueMapper.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public class DefaultGeoPointValueMapper extends GeoPointValueMapper {
+public class ValueMapperGeoPointDefault extends ValueMapperGeoPoint {
 
     @Override
     public void convert(JsonObject jsonObject, String key, LatLng geopoint) {

@@ -16,26 +16,41 @@ package com.unitvectory.firestoreproto2json;
 import com.google.events.cloud.firestore.v1.Value;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.type.LatLng;
+import com.google.protobuf.Timestamp;
 
 /**
- * Mapper for GeoPoint field type.
+ * The abstract ValueMapperTimestamp for converting a protocol buffer timestamp into a JSON
+ * attribute.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public abstract class GeoPointValueMapper extends ValueMapper {
+public abstract class ValueMapperTimestamp extends ValueMapper {
 
-
+    @Override
     final void convert(JsonObject jsonObject, String key, Value value) {
-        convert(jsonObject, key, value.getGeoPointValue());
+        convert(jsonObject, key, value.getTimestampValue());
     }
 
+    @Override
     final void convert(JsonArray jsonArray, Value value) {
-        convert(jsonArray, value.getGeoPointValue());
+        convert(jsonArray, value.getTimestampValue());
     }
 
-    public abstract void convert(JsonObject jsonObject, String key, LatLng geopoint);
+    /**
+     * Convert the timestamp into an attribute in a JSON Object
+     * 
+     * @param jsonObject the JSON Object
+     * @param key the key
+     * @param timestamp the timestamp
+     */
+    public abstract void convert(JsonObject jsonObject, String key, Timestamp timestamp);
 
-    public abstract void convert(JsonArray jsonArray, LatLng geopoint);
+    /**
+     * Convert the timestamp into an entry in the JSONArray
+     * 
+     * @param jsonArray the JSON Array
+     * @param timestamp the timestamp
+     */
+    public abstract void convert(JsonArray jsonArray, Timestamp timestamp);
 
 }

@@ -18,13 +18,26 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 /**
- * The abstract value mapper
+ * The abstract ValueMapper used to convert a Protocol Buffer value into a JSON attribute.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
 public abstract class ValueMapper {
 
+    /**
+     * Convert the value into an attribute in a JSON Object
+     * 
+     * @param jsonObject the JSON Object
+     * @param key the key
+     * @param value the value
+     */
     abstract void convert(JsonObject jsonObject, String key, Value value);
 
+    /**
+     * Convert the value into an entry in the JSONArray
+     * 
+     * @param jsonArray the JSON Array
+     * @param value the value
+     */
     abstract void convert(JsonArray jsonArray, Value value);
 }

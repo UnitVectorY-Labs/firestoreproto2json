@@ -1,6 +1,6 @@
 # firestoreproto2json
 
-Helper library to convert Firestore Proto Buff to JSON Object
+Helper library to convert Firestore Protocol Buffer to JSON Object
 
 ## Purpose
 
@@ -31,3 +31,21 @@ String oldVauleJsonString = FirestoreProto2Json.DEFAULT.oldValueToJsonString(doc
 ```
 
 Additional helper functions are available for converting from the binary encoding of the protobuf or a base64 encoded version.
+
+## Field Conversions
+
+Firestore's [supported data types](https://cloud.google.com/firestore/docs/concepts/data-types) are converted to JSON using the following rules.
+
+| Firestore Data Type   | JSON Data Type                 | Example                                                                     |
+| --------------------- | ------------------------------ | --------------------------------------------------------------------------- |
+| Array                 | JSON Array                     | `{"foo": [1, 2, 3]}`                                                        |
+| Boolean               | Boolean                        | `{"foo": true}`                                                             |
+| Bytes                 | JSON Object with Base64 String | `{"foo": {"_byteString": "ZXhhbXBsZQ=="} }`                                 |
+| Date and Time         | String                         | `{"foo": "2024-02-26T23:18:55.296Z"}`                                       |
+| Floating Point number | Number                         | `{"foo": 12.34}`                                                            |
+| Geographical point    | JSON Object with Numbers       | `{"foo": {"latitude": 36.74050912505929,"longitude": -57.83434128116206} }` |
+| Integer               | Number                         | `{"foo": 123}`                                                              |
+| Map                   | JSON Object                    | `{"foo": {"bar": 123} }`                                                    |
+| Null                  | Null                           | `{"foo": null}`                                                             |
+| Reference             | String                         | `{"foo": "projects/example/databases/(default)/documents/example/record"}`  |
+| Text string           | String                         | `{"foo": "bar"}`                                                            |

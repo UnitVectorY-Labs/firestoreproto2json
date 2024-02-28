@@ -7,6 +7,28 @@
     <packaging>jar</packaging>
 
     <name>firestoreproto2json</name>
+    <description>Helper library to convert Firestore Protocol Buffer to JSON Object</description>
+    <url>https://github.com/UnitVectorY-Labs/firestoreproto2json</url>
+
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git:git@github.com:UnitVectorY-Labs/firestoreproto2json.git</connection>
+        <developerConnection>scm:git:git@github.com:UnitVectorY-Labs/firestoreproto2json.git</developerConnection>
+        <url>git@github.com:UnitVectorY-Labs/firestoreproto2json.git</url>
+    </scm>
+    <developers>
+        <developer>
+            <id>jaredhatfield</id>
+            <name>Jared Hatfield</name>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

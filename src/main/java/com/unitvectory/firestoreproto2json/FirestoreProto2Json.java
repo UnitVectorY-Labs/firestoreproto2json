@@ -43,10 +43,13 @@ public class FirestoreProto2Json {
     private static final Gson GSON = new GsonBuilder().serializeNulls().create();
 
     @Builder.Default
-    private ValueMapperTimestamp timestampValueMapper = new ValueMapperTimestampDefault();
+    private ValueMapperTimestamp valueMapperTimestamp = new ValueMapperTimestampDefault();
 
     @Builder.Default
-    private ValueMapperGeoPoint geoPointValueMapper = new ValueMapperGeoPointDefault();
+    private ValueMapperGeoPoint valueMapperGeoPoint = new ValueMapperGeoPointDefault();
+
+    @Builder.Default
+    private ValueMapperBytes valueMapperBytes = new ValueMapperBytesDefault();
 
     /**
      * Convert a DocumentEventData value to a JSON string.
@@ -241,11 +244,13 @@ public class FirestoreProto2Json {
         } else if (value.hasNullValue()) {
             jsonObject.add(key, JsonNull.INSTANCE);
         } else if (value.hasTimestampValue()) {
-            timestampValueMapper.convert(jsonObject, key, value);
+            this.valueMapperTimestamp.convert(jsonObject, key, value);
         } else if (value.hasGeoPointValue()) {
-            geoPointValueMapper.convert(jsonObject, key, value);
+            this.valueMapperGeoPoint.convert(jsonObject, key, value);
         } else if (value.hasReferenceValue()) {
             jsonObject.addProperty(key, value.getReferenceValue());
+        } else if (value.hasBytesValue()) {
+            this.valueMapperBytes.convert(jsonObject, key, value);
         }
     }
 
@@ -271,11 +276,13 @@ public class FirestoreProto2Json {
         } else if (value.hasNullValue()) {
             jsonArray.add(JsonNull.INSTANCE);
         } else if (value.hasTimestampValue()) {
-            timestampValueMapper.convert(jsonArray, value);
+            this.valueMapperTimestamp.convert(jsonArray, value);
         } else if (value.hasGeoPointValue()) {
-            geoPointValueMapper.convert(jsonArray, value);
+            this.valueMapperGeoPoint.convert(jsonArray, value);
         } else if (value.hasReferenceValue()) {
             jsonArray.add(value.getReferenceValue());
+        } else if (value.hasBytesValue()) {
+            this.valueMapperBytes.convert(jsonArray, value);
         }
 
         // Nested arrays are not supported by Firestore and therefore not implemented as part of

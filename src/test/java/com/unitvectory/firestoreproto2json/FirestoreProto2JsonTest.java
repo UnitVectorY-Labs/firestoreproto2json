@@ -1,6 +1,5 @@
 package com.unitvectory.firestoreproto2json;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.Base64;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;

@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)[![Maven Central](https://img.shields.io/maven-central/v/com.unitvectory/firestoreproto2json)](https://mvnrepository.com/artifact/com.unitvectory/firestoreproto2json)
+
 # firestoreproto2json
 
 Helper library to convert Firestore Protocol Buffer to JSON Object
@@ -7,6 +9,18 @@ Helper library to convert Firestore Protocol Buffer to JSON Object
 This library takes the Protocol Buffer sent from Firestore for a document and converts it to a JSON Object. Firestore stores the underlying documents as protocol buffers. While this is incredibly useful, when you have an event attached to Firestore to receive such as a Cloud Function that processes a change to the document.
 
 This library takes the protocol buffer and converts it to a JSON Object using a set of assumptions that may or may not match how normal interactions with the document using the API.
+
+## Getting Started
+
+This library is available in the Maven Central Repository:
+
+```
+<dependency>
+    <groupId>com.unitvectory</groupId>
+    <artifactId>firestoreproto2json</artifactId>
+    <version>0.0.1</version>
+</dependency>
+```
 
 ## Usage
 
@@ -49,9 +63,3 @@ Firestore's [supported data types](https://cloud.google.com/firestore/docs/conce
 The likely reason Google does not provide this functionality is because there is not a single clean conversion between the Protocol Buffer representation of the document and the JSON representation expected by the application.
 
 Therefore, this library makes a few assumptions regarding the structure of the JSON payload to be generated. For example the formatting of the timestamp field into a string, there are multiple formats that could be used to represent the date.
-
-### Bytes
-
-### GeoPoint
-
-### Timestamp

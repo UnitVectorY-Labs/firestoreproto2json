@@ -1,4 +1,4 @@
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)[![Maven Central](https://img.shields.io/maven-central/v/com.unitvectory/firestoreproto2json)](https://mvnrepository.com/artifact/com.unitvectory/firestoreproto2json)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Maven Central](https://img.shields.io/maven-central/v/com.unitvectory/firestoreproto2json)](https://mvnrepository.com/artifact/com.unitvectory/firestoreproto2json)
 
 # firestoreproto2json
 
@@ -6,13 +6,13 @@ Helper library to convert Firestore Protocol Buffer to JSON Object
 
 ## Purpose
 
-This library takes the Protocol Buffer sent from Firestore for a document and converts it to a JSON Object. Firestore stores the underlying documents as protocol buffers. While this is incredibly useful, when you have an event attached to Firestore to receive such as a Cloud Function that processes a change to the document.
+This library takes the Protocol Buffer sent from Firestore for a document and converts it to a JSON Object. Firestore stores the underlying documents as Protocol Buffers and therefore that is what is sent to a Cloud Function when subscribed. While this is useful, when you have an event attached to Firestore to receive such as a Cloud Function that processes a change to the document.
 
-This library takes the protocol buffer and converts it to a JSON Object using a set of assumptions that may or may not match how normal interactions with the document using the API.
+This library takes the Protocol Buffer and converts it to a JSON Object using a set of assumptions that may or may not match how normal interactions with the document using the API. However, this conversion to JSON may
 
 ## Getting Started
 
-This library is available in the Maven Central Repository:
+This library requires Java 17 and is available in the Maven Central Repository:
 
 ```
 <dependency>
@@ -22,23 +22,80 @@ This library is available in the Maven Central Repository:
 </dependency>
 ```
 
-## Usage
+## Cloud Function Usage
 
-When processing a Firestore document change using a Cloud Function the `DocumentEventData` object will already be parsed from the binary representation and can be converted to JSON.
+The following example is adapted from the Java 17 example for a Cloud Function connected to Firestore. This library includes `com.google.cloud:google-cloudevent-types` and `com.google.protobuf:protobuf-java` as dependencies and therefore they do not need to be included again.
 
-The value and old value can be convereted independently. If either the value or old value is not set null will be returned.
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<modelVersion>4.0.0</modelVersion>
 
-```java
-// To GSON JsonObject
-JsonObject valueJsonObject = FirestoreProto2Json.DEFAULT.valueToJsonObject(documentEventData);
-JsonObject oldValueJsonObject = FirestoreProto2Json.DEFAULT.oldValueToJsonObject(documentEventData);
+<groupId>com.example.cloud.functions</groupId>
+<artifactId>functions-firebase-firestore</artifactId>
 
-// To JSON String
-String valueJsonString = FirestoreProto2Json.DEFAULT.valueToJsonString(documentEventData);
-String oldVauleJsonString = FirestoreProto2Json.DEFAULT.oldValueToJsonString(documentEventData);
+<parent>
+  <groupId>com.google.cloud.samples</groupId>
+  <artifactId>shared-configuration</artifactId>
+  <version>1.2.0</version>
+</parent>
+
+<properties>
+  <maven.compiler.release>17</maven.compiler.release>
+  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+</properties>
+
+<dependencies>
+  <dependency>
+    <groupId>com.unitvectory</groupId>
+    <artifactId>firestoreproto2json</artifactId>
+    <version>0.0.1</version>
+  </dependency>
+  <dependency>
+    <groupId>com.google.cloud.functions</groupId>
+    <artifactId>functions-framework-api</artifactId>
+    <version>1.0.4</version>
+    <scope>provided</scope>
+  </dependency>
+</dependencies>
+
+</project>
 ```
 
-Additional helper functions are available for converting from the binary encoding of the protobuf or a base64 encoded version.
+The following example taken from CloudFunction is adapted to show how firestoreproto2json can be used to convert the value and old value into a JSON string. If the value is not set a null value will be returned.
+
+```java
+package functions;
+
+import com.google.cloud.functions.CloudEventsFunction;
+import com.google.events.cloud.firestore.v1.DocumentEventData;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.unitvectory.firestoreproto2json.FirestoreProto2Json;
+import io.cloudevents.CloudEvent;
+import java.util.logging.Logger;
+
+public class FirebaseFirestore implements CloudEventsFunction {
+  private static final Logger logger = Logger.getLogger(FirebaseFirestore.class.getName());
+
+  @Override
+  public void accept(CloudEvent event) throws InvalidProtocolBufferException {
+    DocumentEventData firestorEventData = DocumentEventData.parseFrom(event.getData().toBytes());
+
+    String valueJsonString = FirestoreProto2Json.DEFAULT.valueToJsonString(firestorEventData);
+    logger.info("Value: " + valueJsonString);
+    String oldVauleJsonString = FirestoreProto2Json.DEFAULT.oldValueToJsonString(firestorEventData);
+    logger.info("Old Value: " + oldVauleJsonString);
+  }
+}
+```
+
+A GSON JsonObject can be returned instead of a String which may be useful for additional manipulation.
+
+```java
+JsonObject valueJsonObject = FirestoreProto2Json.DEFAULT.valueToJsonObject(firestorEventData);
+JsonObject oldValueJsonObject = FirestoreProto2Json.DEFAULT.oldValueToJsonObject(firestorEventData);
+```
+
+Additional functions are available for converting from the `byte[]` of the Protocol Buffer for the [DocumentEventData](https://github.com/googleapis/google-cloudevents/blob/main/proto/google/events/cloud/firestore/v1/data.proto) or a base64 encoded version as well.
 
 ## Field Conversions
 

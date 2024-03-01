@@ -8,7 +8,7 @@ Helper library to convert Firestore Protocol Buffer to JSON Object
 
 This library takes the Protocol Buffer sent from Firestore for a document and converts it to a JSON Object. Firestore stores the underlying documents as Protocol Buffers and therefore that is what is sent to a Cloud Function when subscribed. While this is useful, when you have an event attached to Firestore to receive such as a Cloud Function that processes a change to the document.
 
-This library takes the Protocol Buffer and converts it to a JSON Object using a set of assumptions that may or may not match how normal interactions with the document using the API. However, this conversion to JSON may
+This library takes the Protocol Buffer and converts it to a JSON Object using a set of assumptions that may or may not match how normal interactions with the document using the API. However, this conversion to JSON is likely useful for a generic implementation that needs to take an arbitrary document and convert it to the corresponding JSON representation.
 
 ## Getting Started
 
@@ -120,3 +120,60 @@ Firestore's [supported data types](https://cloud.google.com/firestore/docs/conce
 The likely reason Google does not provide this functionality is because there is not a single clean conversion between the Protocol Buffer representation of the document and the JSON representation expected by the application.
 
 Therefore, this library makes a few assumptions regarding the structure of the JSON payload to be generated. For example the formatting of the timestamp field into a string, there are multiple formats that could be used to represent the date.
+
+The field types with ambiguous conversions can be customized to meet the requirements of the specific use case if necessary.
+
+### Bytes Field
+
+Binary data stored in an attribute in Firestore when represented in JSON will need to be encoded. The encoding used is base64 with the field being stored in a JSON Object with the attribute "\_byteString"
+
+```json
+{
+  "foo": {
+    "_byteString": "ZXhhbXBsZQ=="
+  }
+}
+```
+
+This conversion can be customized by extending the ValueMapperBytes class. A custom FirestoreProto2Json can then be used instead of the default. The following is an example where the text is encoded as hexidecimal and directly assigned to the attribute name.
+
+```java
+FirestoreProto2Json firestoreProto2Json =
+        FirestoreProto2Json.builder().valueMapperBytes(new ValueMapperBytes() {
+            @Override
+            public void convert(JsonObject jsonObject, String key, byte[] bytes) {
+                jsonObject.addProperty(key, HexFormat.of().formatHex(bytes));
+            }
+
+            @Override
+            public void convert(JsonArray jsonArray, byte[] bytes) {
+                jsonArray.add(HexFormat.of().formatHex(bytes));
+            }
+        }).build();
+```
+
+### GeoPoint Field
+
+Google discourages the use of the GeoPoint type, but it is fully supported. THe default mapping being a JSON Object with the latitude and longitude as attribute. The mapping can be overridden by implementing the `ValueMapperGeoPoint` class.
+
+```json
+{
+  "foo": {
+    "latitude": 36.74050912505929,
+    "longitude": -57.83434128116206
+  }
+}
+```
+
+### Timestamp Field
+
+The most likely field whose format may need to be overridden is the Timestamp field. The default behavior is to encode the timestamp as "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" in the UTC timezone.
+
+While `ValueMapperTimestamp` can be overridden to fully customize the conversion `ValueMapperTimestampDefault` provides additional constructors that allow the format and timezone to be specified to simplify customization. For example, the follow customization formats the time but only to the whole second.
+
+```java
+FirestoreProto2Json converter = FirestoreProto2Json.builder()
+        .valueMapperTimestamp(
+                new ValueMapperTimestampDefault("yyyy-MM-dd'T'HH:mm:ss'Z'", ZoneOffset.UTC))
+        .build();
+```

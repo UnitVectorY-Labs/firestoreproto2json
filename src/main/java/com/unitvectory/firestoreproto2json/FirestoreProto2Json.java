@@ -66,7 +66,8 @@ public class FirestoreProto2Json {
      * 
      * @param base64DocumentBytes the base64 encoded protocol buffer of a DocumentEventData
      * @return the JSON string for the value if set; otherwise null
-     * @throws InvalidProtocolBufferException
+     * @throws InvalidProtocolBufferException exception thrown when provided Protocol Buffer is
+     *         invalid
      */
     public String valueToJsonString(String base64DocumentBytes)
             throws InvalidProtocolBufferException {
@@ -78,7 +79,8 @@ public class FirestoreProto2Json {
      * 
      * @param documentBytes the protocol buffer bytes of a DocumentEventData
      * @return the JSON string for the value if set; otherwise null
-     * @throws InvalidProtocolBufferException
+     * @throws InvalidProtocolBufferException exception thrown when provided Protocol Buffer is
+     *         invalid
      */
     public String valueToJsonString(byte[] documentBytes) throws InvalidProtocolBufferException {
         return toJsonString(valueToJsonObject(documentBytes));
@@ -104,7 +106,8 @@ public class FirestoreProto2Json {
      * 
      * @param base64DocumentBytes the base64 encoded protocol buffer of a DocumentEventData
      * @return the JSON object for the value if set; otherwise null
-     * @throws InvalidProtocolBufferException
+     * @throws InvalidProtocolBufferException exception thrown when provided Protocol Buffer is
+     *         invalid
      */
     public JsonObject valueToJsonObject(String base64DocumentBytes)
             throws InvalidProtocolBufferException {
@@ -117,7 +120,8 @@ public class FirestoreProto2Json {
      * 
      * @param documentBytes the protocol buffer bytes of a DocumentEventData
      * @return the JSON object for the value if set; otherwise null
-     * @throws InvalidProtocolBufferException
+     * @throws InvalidProtocolBufferException exception thrown when provided Protocol Buffer is
+     *         invalid
      */
     public JsonObject valueToJsonObject(byte[] documentBytes)
             throws InvalidProtocolBufferException {
@@ -140,7 +144,8 @@ public class FirestoreProto2Json {
      * 
      * @param base64DocumentBytes the base64 encoded protocol buffer of a DocumentEventData
      * @return the JSON string for the old value if set; otherwise null
-     * @throws InvalidProtocolBufferException
+     * @throws InvalidProtocolBufferException exception thrown when provided Protocol Buffer is
+     *         invalid
      */
     public String oldValueToJsonString(String base64DocumentBytes)
             throws InvalidProtocolBufferException {
@@ -152,7 +157,8 @@ public class FirestoreProto2Json {
      * 
      * @param documentBytes the protocol buffer bytes of a DocumentEventData
      * @return the JSON string for the old value if set; otherwise null
-     * @throws InvalidProtocolBufferException
+     * @throws InvalidProtocolBufferException exception thrown when provided Protocol Buffer is
+     *         invalid
      */
     public String oldValueToJsonString(byte[] documentBytes) throws InvalidProtocolBufferException {
         return toJsonString(oldValueToJsonObject(documentBytes));
@@ -178,7 +184,8 @@ public class FirestoreProto2Json {
      * 
      * @param base64DocumentBytes the base64 encoded protocol buffer of a DocumentEventData
      * @return the JSON object for the old value if set; otherwise null
-     * @throws InvalidProtocolBufferException
+     * @throws InvalidProtocolBufferException exception thrown when provided Protocol Buffer is
+     *         invalid
      */
     public JsonObject oldValueToJsonObject(String base64DocumentBytes)
             throws InvalidProtocolBufferException {
@@ -191,7 +198,8 @@ public class FirestoreProto2Json {
      * 
      * @param documentBytes the protocol buffer bytes of a DocumentEventData
      * @return the JSON object for the old value if set; otherwise null
-     * @throws InvalidProtocolBufferException
+     * @throws InvalidProtocolBufferException exception thrown when provided Protocol Buffer is
+     *         invalid
      */
     public JsonObject oldValueToJsonObject(byte[] documentBytes)
             throws InvalidProtocolBufferException {

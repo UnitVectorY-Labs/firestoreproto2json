@@ -14,19 +14,17 @@
 package com.unitvectory.firestoreproto2json;
 
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.skyscreamer.jsonassert.JSONAssert;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.unitvectory.fileparamunit.ListFileSource;
 import static org.junit.jupiter.api.Assertions.fail;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.Stream;
 
 /**
  * Parameterized Tests for FirestoreProto2Json to test various input payloads.
@@ -38,28 +36,11 @@ public class JsonFileTest {
     private static final Gson GSON = new GsonBuilder().serializeNulls().create();
 
     @ParameterizedTest
-    @MethodSource("provideFileNames")
+    @ListFileSource(resources = "/tests/", fileExtension = ".json")
     void validateJSONFile(String fileName) {
-        validate(fileName);
-    }
-
-    private static Stream<String> provideFileNames() throws IOException {
-        Path path = Paths.get("src/test/resources/tests");
-
-        // Ensure the path is correct and the directory exists.
-        if (!Files.exists(path) || !Files.isDirectory(path)) {
-            return Stream.empty();
-        }
-
-        // Get all of the files
-        return Files.walk(path, 1).filter(Files::isRegularFile).map(path::relativize)
-                .map(Path::toString);
-    }
-
-    private void validate(String fileName) {
         try {
             // Read in the file content
-            Path filePath = Paths.get("src/test/resources/tests", fileName);
+            Path filePath = Paths.get(fileName);
             String content = Files.readString(filePath);
             JsonElement rootElement = JsonParser.parseString(content);
             if (!rootElement.isJsonObject()) {

@@ -1,4 +1,4 @@
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Maven Central](https://img.shields.io/maven-central/v/com.unitvectory/firestoreproto2json)](https://mvnrepository.com/artifact/com.unitvectory/firestoreproto2json)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Maven Central](https://img.shields.io/maven-central/v/com.unitvectory/firestoreproto2json)](https://mvnrepository.com/artifact/com.unitvectory/firestoreproto2json) [![codecov](https://codecov.io/gh/UnitVectorY-Labs/firestoreproto2json/graph/badge.svg?token=N6CU9DZRIQ)](https://codecov.io/gh/UnitVectorY-Labs/firestoreproto2json)
 
 # firestoreproto2json
 

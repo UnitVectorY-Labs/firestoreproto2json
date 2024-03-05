@@ -14,66 +14,59 @@
 package com.unitvectory.firestoreproto2json;
 
 import org.junit.jupiter.params.ParameterizedTest;
-import org.skyscreamer.jsonassert.JSONAssert;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.unitvectory.fileparamunit.ListFileSource;
+import com.unitvectory.jsonparamunit.JsonNodeParamUnit;
 import static org.junit.jupiter.api.Assertions.fail;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Parameterized Tests for FirestoreProto2Json to test various input payloads.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public class JsonFileTest {
+public class JsonFileTest extends JsonNodeParamUnit {
 
-    private static final Gson GSON = new GsonBuilder().serializeNulls().create();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @ParameterizedTest
     @ListFileSource(resources = "/tests/", fileExtension = ".json")
     void validateJSONFile(String fileName) {
+        run(fileName);
+    }
+
+    @Override
+    protected JsonNode process(JsonNode input, String context) {
+
+        String protocolBuffer = input.get("protocolBuffer").asText();
+
         try {
-            // Read in the file content
-            Path filePath = Paths.get(fileName);
-            String content = Files.readString(filePath);
-            JsonElement rootElement = JsonParser.parseString(content);
-            if (!rootElement.isJsonObject()) {
-                fail("The root of the JSON document is not an object in " + fileName);
+            ObjectNode output = mapper.createObjectNode();
+
+            String valueString = FirestoreProto2Json.DEFAULT.valueToJsonString(protocolBuffer);
+            if (valueString != null) {
+                JsonNode value = mapper.readTree(valueString);
+                output.set("value", value);
             }
 
-            JsonObject rootObject = rootElement.getAsJsonObject();
-
-            // Extract protobuf as a String
-            String protobuf =
-                    rootObject.has("protobuf") ? rootObject.get("protobuf").getAsString() : "";
-            if (protobuf.isEmpty()) {
-                fail("Protobuf field is missing or null in " + fileName);
+            String oldValueString =
+                    FirestoreProto2Json.DEFAULT.oldValueToJsonString(protocolBuffer);
+            if (oldValueString != null) {
+                JsonNode oldValue = mapper.readTree(oldValueString);
+                output.set("oldValue", oldValue);
             }
 
-            // Process the value
-            String expectedValue =
-                    rootObject.has("value") ? GSON.toJson(rootObject.get("value")) : null;
-            String actualValue = FirestoreProto2Json.DEFAULT.valueToJsonString(protobuf);
-            JSONAssert.assertEquals("Value did not match.\nExpected: " + expectedValue
-                    + "\nActual: " + actualValue + "\n", expectedValue, actualValue, true);
-
-            // Process the old value
-            String expectedOldValue =
-                    rootObject.has("oldValue") ? GSON.toJson(rootObject.get("oldValue")) : null;
-            String actualOldValue = FirestoreProto2Json.DEFAULT.oldValueToJsonString(protobuf);
-            JSONAssert.assertEquals("Old value did not match.\nExpected: " + expectedOldValue
-                    + "\nActual: " + actualOldValue + "\n", expectedOldValue, actualOldValue, true);
-
-
-        } catch (Exception e) {
-            fail("Unexpected Exception", e);
+            return output;
+        } catch (InvalidProtocolBufferException e) {
+            fail("Failed to parse protocol buffer.", e);
+        } catch (JsonProcessingException e) {
+            fail("Failed to parse JSON.", e);
         }
+
+        return null;
     }
 }
 

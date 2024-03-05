@@ -1,4 +1,6 @@
 {
-  "protobuf": "CpgBClhwcm9qZWN0cy9maXJlc3RvcmVwcm90bzJqc29uL2RhdGFiYXNlcy8oZGVmYXVsdCkvZG9jdW1lbnRzL3Rlc3RkYXRhL3hJb1JwNm9keU41UjhpSGM3N2trEiAKDnRpbWVzdGFtcEZpZWxkEg5SDAjfuPSuBhCAtJKNARoMCOy49K4GEJijmrUBIgwI7Lj0rgYQmKOatQE=",
-  "value": { "timestampField": "2024-02-26T23:18:55.296Z" }
+  "input": {
+    "protocolBuffer": "CpgBClhwcm9qZWN0cy9maXJlc3RvcmVwcm90bzJqc29uL2RhdGFiYXNlcy8oZGVmYXVsdCkvZG9jdW1lbnRzL3Rlc3RkYXRhL3hJb1JwNm9keU41UjhpSGM3N2trEiAKDnRpbWVzdGFtcEZpZWxkEg5SDAjfuPSuBhCAtJKNARoMCOy49K4GEJijmrUBIgwI7Lj0rgYQmKOatQE="
+  },
+  "output": { "value": { "timestampField": "2024-02-26T23:18:55.296Z" } }
 }

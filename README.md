@@ -80,8 +80,11 @@ public class FirebaseFirestore implements CloudEventsFunction {
   public void accept(CloudEvent event) throws InvalidProtocolBufferException {
     DocumentEventData firestorEventData = DocumentEventData.parseFrom(event.getData().toBytes());
 
+    // Convert the value to JSON
     String valueJsonString = FirestoreProto2Json.DEFAULT.valueToJsonString(firestorEventData);
     logger.info("Value: " + valueJsonString);
+
+    // Convert the old value to JSON
     String oldVauleJsonString = FirestoreProto2Json.DEFAULT.oldValueToJsonString(firestorEventData);
     logger.info("Old Value: " + oldVauleJsonString);
   }

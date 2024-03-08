@@ -18,7 +18,7 @@ This library requires Java 17 and is available in the Maven Central Repository:
 <dependency>
     <groupId>com.unitvectory</groupId>
     <artifactId>firestoreproto2json</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 </dependency>
 ```
 
@@ -48,7 +48,7 @@ The following example is adapted from the Java 17 example for a Cloud Function c
   <dependency>
     <groupId>com.unitvectory</groupId>
     <artifactId>firestoreproto2json</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
   </dependency>
   <dependency>
     <groupId>com.google.cloud.functions</groupId>

@@ -157,7 +157,7 @@ FirestoreProto2Json firestoreProto2Json =
 
 ### GeoPoint Field
 
-Google discourages the use of the GeoPoint type, but it is fully supported. THe default mapping being a JSON Object with the latitude and longitude as attribute. The mapping can be overridden by implementing the `ValueMapperGeoPoint` class.
+Google discourages the use of the GeoPoint type, but it is fully supported. The default mapping being a JSON Object with the latitude and longitude as attribute. The mapping can be overridden by implementing the `ValueMapperGeoPoint` class.
 
 ```json
 {

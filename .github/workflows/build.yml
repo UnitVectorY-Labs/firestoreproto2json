@@ -29,3 +29,5 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         slug: UnitVectorY-Labs/firestoreproto2json
+    - name: Submit Dependency Snapshot
+      uses: advanced-security/maven-dependency-submission-action@v3

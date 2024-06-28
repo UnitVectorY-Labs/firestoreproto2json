@@ -15,8 +15,8 @@ package com.unitvectory.firestoreproto2json;
 
 import java.util.Base64;
 import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
 import com.google.events.cloud.firestore.v1.DocumentEventData;
+import com.unitvectory.jsonassertify.JSONAssert;
 
 /**
  * FirestoreProto2Json tests for the builder

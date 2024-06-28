@@ -14,7 +14,8 @@
 package com.unitvectory.firestoreproto2json;
 
 import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
+
+import com.unitvectory.jsonassertify.JSONAssert;
 
 /**
  * Custom Timestamp Test

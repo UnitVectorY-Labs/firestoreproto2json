@@ -56,9 +56,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.skyscreamer</groupId>
-            <artifactId>jsonassert</artifactId>
-            <version>1.5.1</version>
+            <groupId>com.unitvectory</groupId>
+            <artifactId>jsonassertify</artifactId>
+            <version>0.0.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>

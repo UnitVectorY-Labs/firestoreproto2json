@@ -78,14 +78,14 @@ public class FirebaseFirestore implements CloudEventsFunction {
 
   @Override
   public void accept(CloudEvent event) throws InvalidProtocolBufferException {
-    DocumentEventData firestorEventData = DocumentEventData.parseFrom(event.getData().toBytes());
+    DocumentEventData firestoreEventData = DocumentEventData.parseFrom(event.getData().toBytes());
 
     // Convert the value to JSON
-    String valueJsonString = FirestoreProto2Json.DEFAULT.valueToJsonString(firestorEventData);
+    String valueJsonString = FirestoreProto2Json.DEFAULT.valueToJsonString(firestoreEventData);
     logger.info("Value: " + valueJsonString);
 
     // Convert the old value to JSON
-    String oldVauleJsonString = FirestoreProto2Json.DEFAULT.oldValueToJsonString(firestorEventData);
+    String oldVauleJsonString = FirestoreProto2Json.DEFAULT.oldValueToJsonString(firestoreEventData);
     logger.info("Old Value: " + oldVauleJsonString);
   }
 }
@@ -94,8 +94,8 @@ public class FirebaseFirestore implements CloudEventsFunction {
 A GSON JsonObject can be returned instead of a String which may be useful for additional manipulation.
 
 ```java
-JsonObject valueJsonObject = FirestoreProto2Json.DEFAULT.valueToJsonObject(firestorEventData);
-JsonObject oldValueJsonObject = FirestoreProto2Json.DEFAULT.oldValueToJsonObject(firestorEventData);
+JsonObject valueJsonObject = FirestoreProto2Json.DEFAULT.valueToJsonObject(firestoreEventData);
+JsonObject oldValueJsonObject = FirestoreProto2Json.DEFAULT.oldValueToJsonObject(firestoreEventData);
 ```
 
 Additional functions are available for converting from the `byte[]` of the Protocol Buffer for the [DocumentEventData](https://github.com/googleapis/google-cloudevents/blob/main/proto/google/events/cloud/firestore/v1/data.proto) or a base64 encoded version as well.

@@ -2,7 +2,7 @@
 
 # firestoreproto2json
 
-Helper library to convert Firestore Protocol Buffer to JSON Object
+Java helper library to convert Firestore Protocol Buffer to JSON Object
 
 ## Purpose
 

@@ -84,6 +84,14 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Keep transitive Jackson test dependencies patched and aligned. -->
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>2.22.4</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>

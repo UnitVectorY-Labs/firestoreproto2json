@@ -22,5 +22,4 @@ config:
       - target
       - .github/**
   gitignore:
-    - .vscode
-    - /.apt_generated_tests/
+    - .vscode/

@@ -20,20 +20,6 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
-### Java IDEs ###
-.classpath
-.project
-.settings/
-.metadata
-.factorypath
-.apt_generated/
-.apt_generated_tests/
-.idea/
-*.iml
-*.iws
-/out/
-/bin/
-
 # https://www.toptal.com/developers/gitignore/api/macos
 ### macOS ###
 # General
@@ -136,5 +122,4 @@ $RECYCLE.BIN/
 *.log
 
 ## Additional Ignore Patterns
-.vscode
-/.apt_generated_tests/
+.vscode/

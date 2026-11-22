@@ -1,0 +1,15 @@
+name: firestoreproto2json
+default_branch: main
+config:
+  description: "Helper library to convert Firestore Protocol Buffer to JSON Object"
+  license: Apache-2.0
+  language: java17
+  release: none
+  maven:
+    group_id: com.unitvectory
+    artifact_id: firestoreproto2json
+  release_github: true
+  status: active
+  codecov:
+    enabled: true
+    token: N6CU9DZRIQ

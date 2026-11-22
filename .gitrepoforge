@@ -5,11 +5,22 @@ config:
   license: Apache-2.0
   language: java17
   release: none
-  maven:
-    group_id: com.unitvectory
-    artifact_id: firestoreproto2json
   release_github: true
   status: active
+  osv: sarif
   codecov:
     enabled: true
     token: N6CU9DZRIQ
+  maven:
+    group_id: com.unitvectory
+    artifact_id: firestoreproto2json
+    javadoc: true
+  docs:
+    enabled: false
+  clip4llm:
+    exclude:
+      - target
+      - .github/**
+  gitignore:
+    - .vscode
+    - /.apt_generated_tests/

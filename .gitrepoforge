@@ -8,9 +8,6 @@ config:
   release_github: true
   status: active
   osv: sarif
-  codecov:
-    enabled: true
-    token: N6CU9DZRIQ
   maven:
     group_id: com.unitvectory
     artifact_id: firestoreproto2json
